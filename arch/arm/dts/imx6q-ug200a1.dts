@@ -11,14 +11,10 @@
 #include "imx6q.dtsi"
 
 / {
-	model = "Retronix i.MX6 Quad PITX Board";
-	compatible = "rtx,rtx-imx6q-pitx", "fsl,imx6q";
+	model = "UBON UG200A1";
+	compatible = "fsl,imx6q-ug200a1", "fsl,imx6q";
 
 	aliases {
-		mmc0 = &usdhc4;
-		mmc1 = &usdhc3;
-		mmc2 = &usdhc2;
-		mmc3 = &usdhc1;
 		mxcfb0 = &mxcfb1;
 		mxcfb1 = &mxcfb2;
 		mxcfb2 = &mxcfb3;
@@ -285,12 +281,22 @@
 &fec {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_enet_pitx>;
-	phy-mode = "rgmii";
-	phy-reset-gpios = <&gpio1 25 0>;
-	phy-reset-fall-duration = <1>;
-	phy-reset-rise-duration = <20>;
-	phy-reset-boot-on;
+	phy-mode = "rgmii-id";
+	phy-handle = <&ethphy>;
+	phy-reset-duration = <10>;
+	phy-reset-gpios = <&gpio1 25 GPIO_ACTIVE_LOW>;
 	status = "okay";
+
+	mdio {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		ethphy: ethernet-phy@7 {
+			reg = <7>;
+			assigned-clocks = <&clks IMX6QDL_CLK_ENET_REF>;
+			assigned-clock-rates = <125000000>;
+		};
+	};
 };
 
 &hdmi_audio {
@@ -673,7 +679,7 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_hog_pitx &pinctrl_pmic_pitx>;
 
-	imx6qdl-sabresd {
+	imx6q-ug200a1 {
 		pinctrl_hog_pitx: hoggrp {
 			fsl,pins = <
 				/* watchdog */
