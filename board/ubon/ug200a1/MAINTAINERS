@@ -1,0 +1,6 @@
+UG200A1 BOARD
+M:	ubon <ubon@tw.ute.com>
+S:	Maintained
+F:	board/ubon/ug200a1/
+F:	include/configs/ug200a1.h
+F:	configs/ug200a1_defconfig

@@ -662,6 +662,7 @@ dtb-y += \
 	imx6q-pop-arm2.dtb \
 	imx6q-tbs2910.dtb \
 	imx6q-wandboard-revb1.dtb \
+	imx6q-ug200a1.dtb \
 	imx6qp-sabreauto.dtb \
 	imx6qp-sabreauto-ecspi.dtb \
 	imx6qp-sabreauto-gpmi-weim.dtb \

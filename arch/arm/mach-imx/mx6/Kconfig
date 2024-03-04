@@ -835,6 +835,17 @@ config TARGET_BRPPT2
           Support
           B&R BRPPT2 platform
           based on Freescale's iMX6 SoC
+
+config TARGET_UG200A1
+	bool "ug200a1"
+    	select MX6Q
+	select BOARD_LATE_INIT
+    	select DM
+    	select DM_THERMAL
+    	select BOARD_EARLY_INIT_F
+    	select NXP_BOARD_REVISION
+    	imply CMD_DM
+    	
 endchoice
 
 config SYS_SOC
@@ -900,5 +911,6 @@ source "board/udoo/neo/Kconfig"
 source "board/wandboard/Kconfig"
 source "board/warp/Kconfig"
 source "board/BuR/brppt2/Kconfig"
+source "board/ubon/ug200a1/Kconfig"
 
 endif

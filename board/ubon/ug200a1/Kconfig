@@ -1,0 +1,15 @@
+if TARGET_UG200A1
+
+config SYS_BOARD
+	default "ug200a1"
+
+config SYS_VENDOR
+	default "ubon"
+
+config SYS_CONFIG_NAME
+	default "ug200a1"
+
+config SYS_TEXT_BASE
+    default 0x17800000
+
+endif
