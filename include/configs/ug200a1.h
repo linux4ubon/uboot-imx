@@ -13,9 +13,9 @@
 #include "imx6_spl.h"
 #endif
 
-#define CONFIG_MACH_TYPE		3980
-#define CONFIG_MXC_UART_BASE	UART2_BASE
-#define CONSOLE_DEV				"ttymxc1"
+#define CONFIG_MACH_TYPE	3980
+#define CONFIG_MXC_UART_BASE	UART1_BASE
+#define CONSOLE_DEV		"ttymxc0"
 #define CONFIG_MMCROOT			"/dev/mmcblk2p2"  /* SDHC3 */
 
 #if defined(CONFIG_MX6Q)
@@ -26,7 +26,7 @@
 #define PHYS_SDRAM_SIZE		(512u * 1024 * 1024)
 #endif
 
-//-----------------------------
+//---------------------------
 #include "mx6_common.h"
 #include "imx_env.h"
 
@@ -197,12 +197,11 @@
 	"epdc_waveform=epdc_splash.bin\0" \
 	"script=boot.scr\0" \
 	"image=zImage\0" \
-	"fdt_file=imx6q-ug200a1.dtb\0" \
+	"fdt_file=undefined\0" \
 	"fdt_addr=0x18000000\0" \
 	"tee_addr=0x20000000\0" \
 	"tee_file=undefined\0" \
 	"boot_fdt=try\0" \
-	"ethaddr=00:50:08:00:00:01\0" \
 	"ip_dyn=yes\0" \
 	"console=" CONSOLE_DEV "\0" \
 	"dfuspi=dfu 0 sf 0:0:10000000:0\0" \
@@ -290,8 +289,44 @@
 				"bootz; " \
 			"fi; " \
 		"fi;\0" \
+		"findfdt="\
+			"if test $fdt_file = undefined; then " \
+				"if test $board_name = SABREAUTO && test $board_rev = MX6QP; then " \
+					"setenv fdt_file imx6qp-sabreauto.dtb; fi; " \
+				"if test $board_name = SABREAUTO && test $board_rev = MX6Q; then " \
+					"setenv fdt_file imx6q-sabreauto.dtb; fi; " \
+				"if test $board_name = SABREAUTO && test $board_rev = MX6DL; then " \
+					"setenv fdt_file imx6dl-sabreauto.dtb; fi; " \
+				"if test $board_name = SABRESD && test $board_rev = MX6QP; then " \
+					"setenv fdt_file imx6qp-sabresd.dtb; fi; " \
+				"if test $board_name = SABRESD && test $board_rev = MX6Q; then " \
+					"setenv fdt_file imx6q-ug200a1.dtb; fi; " \
+				"if test $board_name = SABRESD && test $board_rev = MX6DL; then " \
+					"setenv fdt_file imx6dl-sabresd.dtb; fi; " \
+				"if test $fdt_file = undefined; then " \
+					"echo WARNING: Could not determine dtb to use; fi; " \
+			"fi;\0" \
+		"findtee="\
+			"if test $tee_file = undefined; then " \
+				"if test $board_name = SABREAUTO && test $board_rev = MX6QP; then " \
+					"setenv tee_file uTee-6qpauto; fi; " \
+				"if test $board_name = SABREAUTO && test $board_rev = MX6Q; then " \
+					"setenv tee_file uTee-6qauto; fi; " \
+				"if test $board_name = SABREAUTO && test $board_rev = MX6DL; then " \
+					"setenv tee_file uTee-6dlauto; fi; " \
+				"if test $board_name = SABRESD && test $board_rev = MX6QP; then " \
+					"setenv tee_file uTee-6qpsdb; fi; " \
+				"if test $board_name = SABRESD && test $board_rev = MX6Q; then " \
+					"setenv tee_file uTee-6qsdb; fi; " \
+				"if test $board_name = SABRESD && test $board_rev = MX6DL; then " \
+					"setenv tee_file uTee-6dlsdb; fi; " \
+				"if test $tee_file = undefined; then " \
+					"echo WARNING: Could not determine tee to use; fi; " \
+			"fi;\0" \
 
 #define CONFIG_BOOTCOMMAND \
+	"run findfdt;" \
+	"run findtee;" \
 	"mmc dev ${mmcdev};" \
 	"if mmc rescan; then " \
 		"if run loadbootscript; then " \
@@ -394,8 +429,7 @@
 #define CONFIG_USBD_HS
 
 #endif /* CONFIG_ANDROID_SUPPORT */
-
-//-----------------------------
+//---------------------------
 
 /* Falcon Mode */
 #define CONFIG_SPL_FS_LOAD_ARGS_NAME	"args"
